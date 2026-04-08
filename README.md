@@ -2,15 +2,6 @@
 
 Install necessary dependencies (Express, Sequelize, SQLite, etc.)
 
-Design Database Schema
-Create your relational database with at least 3 resource types:
-
-Set up Sequelize models for each resource type in your database/models directory
-Define proper relationships between your models using foreign keys
-Include appropriate data types, constraints, and validations for each field
-Create a database setup script that initializes your tables and relationships
-Create a setup command in your package.json.
-
 Seed Database
 Write a seed script that populates your database with realistic sample data for all resource types with proper relationships. Make the seed script easily runnable by adding a seed command to your package.json.
 💡 Sample Data and AI Usage: AI is exceptionally good at creating sample data for your database. You should use a generative AI tool to create enough realistic data for your system!
