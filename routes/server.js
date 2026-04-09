@@ -16,6 +16,7 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Sequelize } = require('sequelize');
 const { db, Zoo, Animal, Attraction, Zookeeper, User } = require('../database/setup');
 require('dotenv').config();
 
@@ -737,7 +738,7 @@ app.post('/users/register', async (req, res) => {
         // Check if user exists
         const existingUser = await User.findOne({ 
             where: { 
-                [db.Op.or]: [
+                [Sequelize.Op.or]: [
                     { email: email },
                     { username: username }
                 ]
