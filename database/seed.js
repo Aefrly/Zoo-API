@@ -6,7 +6,7 @@ async function initializeDatabase() {
         await db.authenticate();
         console.log('Database connection established successfully');
 
-        await db.sync({ force: false }); // Set to true to drop and recreate tables on every run
+        await db.sync({ force: true }); // Set to true to drop and recreate tables on every run
         console.log('Database synchronized successfully');
 
         //Creating sample data
