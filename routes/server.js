@@ -72,7 +72,8 @@ app.get('/', (req, res) => {
                 register: 'POST /users/register',
                 login: 'POST /users/login',
                 logout: 'POST /users/logout (with authentication)',
-                getUsers: 'GET /users (with authentication)'
+                getUsers: 'GET /users (with authentication)',
+                deleteUser: 'DELETE /users/:id (with authentication)'
             }
         }
     });
@@ -879,6 +880,32 @@ app.get('/users', requireAuth, async (req, res) => {
         res.status(500).json({
             success: false,
             error: 'Failed to retrieve users',
+            message: error.message
+        });
+    }
+});
+
+// DELETE /users/:id - Delete a user (requires authentication)
+app.delete('/users/:id', requireAuth, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User not found',
+                message: 'The requested user could not be found'
+            });
+        }
+
+        await user.destroy();
+        res.status(200).json({
+            success: true,
+            message: 'User deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'Failed to delete user',
             message: error.message
         });
     }
