@@ -1,11 +1,5 @@
 # Zoo-API
 
-Install necessary dependencies (Express, Sequelize, SQLite, etc.)
-
-Seed Database
-Write a seed script that populates your database with realistic sample data for all resource types with proper relationships. Make the seed script easily runnable by adding a seed command to your package.json.
-💡 Sample Data and AI Usage: AI is exceptionally good at creating sample data for your database. You should use a generative AI tool to create enough realistic data for your system!
-
 Implement Core CRUD Operations
 Build RESTful endpoints for each resource type:
 
