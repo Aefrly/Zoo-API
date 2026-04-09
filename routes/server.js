@@ -728,7 +728,9 @@ app.post('/users/register', async (req, res) => {
         // Validate input
         if (!username || !email || !password || !firstName || !lastName) {
             return res.status(400).json({ 
-                error: 'All fields are required: username, email, password, firstName, lastName' 
+                success: false,
+                error: 'Validation failed',
+                message: 'All fields are required: username, email, password, firstName, lastName' 
             });
         }
         
@@ -744,7 +746,9 @@ app.post('/users/register', async (req, res) => {
         
         if (existingUser) {
             return res.status(400).json({ 
-                error: 'User with this email or username already exists' 
+                success: false,
+                error: 'Validation failed',
+                message: 'User with this email or username already exists' 
             });
         }
         
@@ -761,8 +765,9 @@ app.post('/users/register', async (req, res) => {
         });
         
         res.status(201).json({
+            success: true,
             message: 'User registered successfully',
-            user: {
+            data: {
                 id: newUser.id,
                 username: newUser.username,
                 email: newUser.email,
@@ -773,27 +778,35 @@ app.post('/users/register', async (req, res) => {
         
     } catch (error) {
         console.error('Error registering user:', error);
-        res.status(500).json({ error: 'Failed to register user' });
+        res.status(500).json({ 
+            success: false,
+            error: 'Failed to register user',
+            message: error.message
+        });
     }
 });
 
 // POST /users/login - User login
 app.post('/users/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
         
         // Validate input
-        if (!email || !password) {
+        if (!username || !password) {
             return res.status(400).json({ 
-                error: 'Email and password are required' 
+                success: false,
+                error: 'Validation failed',
+                message: 'Username and password are required' 
             });
         }
         
         // Find user
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ where: { username } });
         if (!user) {
             return res.status(401).json({ 
-                error: 'Invalid email or password' 
+                success: false,
+                error: 'Authentication failed',
+                message: 'Invalid username or password' 
             });
         }
         
@@ -801,7 +814,9 @@ app.post('/users/login', async (req, res) => {
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
             return res.status(401).json({ 
-                error: 'Invalid email or password' 
+                success: false,
+                error: 'Authentication failed',
+                message: 'Invalid username or password' 
             });
         }
         
@@ -809,16 +824,14 @@ app.post('/users/login', async (req, res) => {
         const token = jwt.sign(
             { 
                 id: user.id, 
-                username: user.username,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName
+                username: user.username
             },
             process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES_IN }
+            { expiresIn: '24h' }
         );
         
-        res.json({
+        res.status(200).json({
+            success: true,
             message: 'Login successful',
             token: token,
             user: {
@@ -832,7 +845,11 @@ app.post('/users/login', async (req, res) => {
         
     } catch (error) {
         console.error('Error logging in user:', error);
-        res.status(500).json({ error: 'Failed to login' });
+        res.status(500).json({ 
+            success: false,
+            error: 'Failed to login',
+            message: error.message
+        });
     }
 });
 
