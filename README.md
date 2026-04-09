@@ -9,14 +9,6 @@ Build PUT routes to update existing resources
 Add DELETE routes to remove resources
 Ensure all routes follow RESTful conventions and return appropriate HTTP status codes
 
-Create Basic Middleware
-Implement essential middleware functions:
-
-Add express.json() middleware for parsing JSON requests
-Create basic logging middleware to track API requests
-Implement error handling middleware to catch and format errors
-Add any custom middleware needed for your specific API functionality
-
 Add Basic Error Handling
 Implement proper error responses throughout your API:
 
