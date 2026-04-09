@@ -1,15 +1,5 @@
-/* Create Basic Middleware
-Implement essential middleware functions:
-
-Add express.json() middleware for parsing JSON requests
-Create basic logging middleware to track API requests
-Implement error handling middleware to catch and format errors
-Add any custom middleware needed for your specific API functionality
-*/
-
-// Middleware
-app.use(express.json());
-app.use(cors());
+const jwt = require('jsonwebtoken');
+const { db } = require('../database/setup');
 
 // JWT Authentication Middleware
 function requireAuth(req, res, next) {
@@ -54,4 +44,37 @@ async function testConnection() {
     }
 }
 
-testConnection();
+// Logging middleware
+const loggingMiddleware = (req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        console.log(`${req.method} ${req.path} - ${res.statusCode} - ${duration}ms`);
+    });
+    next();
+};
+
+// Error handling middleware
+const errorHandler = (err, req, res, next) => {
+    console.error('Unhandled error:', err);
+    res.status(500).json({ 
+        error: 'Internal server error',
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+    });
+};
+
+// 404 handler
+const notFoundHandler = (req, res) => {
+    res.status(404).json({ 
+        error: 'Endpoint not found',
+        message: `${req.method} ${req.path} is not a valid endpoint`
+    });
+};
+
+module.exports = {
+    requireAuth,
+    testConnection,
+    loggingMiddleware,
+    errorHandler,
+    notFoundHandler
+};
