@@ -1,23 +1,4 @@
 # Zoo-API
-
-Implement Core CRUD Operations
-Build RESTful endpoints for each resource type:
-
-Create GET routes to retrieve all items and individual items by ID
-Implement POST routes to create new resources with proper validation
-Build PUT routes to update existing resources
-Add DELETE routes to remove resources
-Ensure all routes follow RESTful conventions and return appropriate HTTP status codes
-
-Add Basic Error Handling
-Implement proper error responses throughout your API:
-
-Handle database connection errors gracefully
-Return appropriate HTTP status codes (400, 404, 500, etc.)
-Provide meaningful error messages in JSON format
-Include validation error handling for required fields and data types
-
-
 Write Initial Unit Tests
 Create basic tests for critical functionality:
 

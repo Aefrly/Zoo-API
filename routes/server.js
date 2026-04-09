@@ -1,17 +1,3 @@
-/*Implement Core CRUD Operations
-Build RESTful endpoints for each resource type:
-
-Ensure all routes follow RESTful conventions and return appropriate HTTP status codes*/
-
-/*Add Basic Error Handling
-Implement proper error responses throughout your API:
-
-Handle database connection errors gracefully
-Return appropriate HTTP status codes (400, 404, 500, etc.)
-Provide meaningful error messages in JSON format
-Include validation error handling for required fields and data types
-*/
-
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
