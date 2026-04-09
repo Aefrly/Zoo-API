@@ -59,7 +59,7 @@ const Animal = db.define('Animal', {
     animal_quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 1
     }
 });
 
