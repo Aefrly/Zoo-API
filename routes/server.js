@@ -1,3 +1,17 @@
+/*Implement Core CRUD Operations
+Build RESTful endpoints for each resource type:
+
+Ensure all routes follow RESTful conventions and return appropriate HTTP status codes*/
+
+/*Add Basic Error Handling
+Implement proper error responses throughout your API:
+
+Handle database connection errors gracefully
+Return appropriate HTTP status codes (400, 404, 500, etc.)
+Provide meaningful error messages in JSON format
+Include validation error handling for required fields and data types
+*/
+
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -856,8 +870,13 @@ app.get('/users', requireAuth, async (req, res) => {
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on port http://localhost:${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV}`);
-});
+// Export app for testing
+module.exports = app;
+
+// Start server only if this file is run directly
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port http://localhost:${PORT}`);
+        console.log(`Environment: ${process.env.NODE_ENV}`);
+    });
+}
