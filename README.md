@@ -1,12 +1,4 @@
 # Zoo-API
-Write Initial Unit Tests
-Create basic tests for critical functionality:
-
-Set up a testing framework (Jest and Supertest)
-Write tests for at least one CRUD operation per resource type
-Include tests for both successful operations and error conditions
-Ensure your tests can run independently and don't interfere with your development database
-
 Test Your Complete API
 Using Postman, verify all functionality for your MVP works correctly and that errors are handled correctly.
 
