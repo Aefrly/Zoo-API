@@ -32,7 +32,7 @@ const Zoo = db.define('Zoo', {
     zoo_parking_available: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: true
     }
 });
 
