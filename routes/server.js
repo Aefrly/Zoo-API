@@ -129,7 +129,7 @@ app.get('/zoos/:id', async (req, res) => {
     }
 });
 
-// POST /zoos - Create a new zoo
+// POST /zoos - Create a new zoo (requires authentication)
 app.post('/zoos', requireAuth, async (req, res) => {
     try {
         const { zoo_name, zoo_location, zoo_admission_price, zoo_parking_available } = req.body;
@@ -172,7 +172,7 @@ app.post('/zoos', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /zoos/:id - Update a zoo
+// PUT /zoos/:id - Update a zoo (requires authentication)
 app.put('/zoos/:id', requireAuth, async (req, res) => {
     try {
         const zoo = await Zoo.findByPk(req.params.id);
@@ -214,7 +214,7 @@ app.put('/zoos/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /zoos/:id - Delete a zoo
+// DELETE /zoos/:id - Delete a zoo (requires authentication)
 app.delete('/zoos/:id', requireAuth, async (req, res) => {
     try {
         const zoo = await Zoo.findByPk(req.params.id);
@@ -288,7 +288,7 @@ app.get('/animals/:id', async (req, res) => {
     }
 });
 
-// POST /animals - Create a new animal
+// POST /animals - Create a new animal (requires authentication)
 app.post('/animals', requireAuth, async (req, res) => {
     try {
         const { region_name, animal_name, animal_species, animal_quantity, zooId } = req.body;
@@ -331,7 +331,7 @@ app.post('/animals', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /animals/:id - Update an animal
+// PUT /animals/:id - Update an animal (requires authentication)
 app.put('/animals/:id', requireAuth, async (req, res) => {
     try {
         const animal = await Animal.findByPk(req.params.id);
@@ -373,7 +373,7 @@ app.put('/animals/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /animals/:id - Delete an animal
+// DELETE /animals/:id - Delete an animal (requires authentication)
 app.delete('/animals/:id', requireAuth, async (req, res) => {
     try {
         const animal = await Animal.findByPk(req.params.id);
@@ -447,7 +447,7 @@ app.get('/attractions/:id', async (req, res) => {
     }
 });
 
-// POST /attractions - Create a new attraction
+// POST /attractions - Create a new attraction (requires authentication)
 app.post('/attractions', requireAuth, async (req, res) => {
     try {
         const { attraction_name, attraction_type, attraction_price, zooId } = req.body;
@@ -489,7 +489,7 @@ app.post('/attractions', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /attractions/:id - Update an attraction
+// PUT /attractions/:id - Update an attraction (requires authentication)
 app.put('/attractions/:id', requireAuth, async (req, res) => {
     try {
         const attraction = await Attraction.findByPk(req.params.id);
@@ -530,7 +530,7 @@ app.put('/attractions/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /attractions/:id - Delete an attraction
+// DELETE /attractions/:id - Delete an attraction (requires authentication)
 app.delete('/attractions/:id', requireAuth, async (req, res) => {
     try {
         const attraction = await Attraction.findByPk(req.params.id);
