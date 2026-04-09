@@ -1,10 +1,6 @@
 /*Implement Core CRUD Operations
 Build RESTful endpoints for each resource type:
 
-Create GET routes to retrieve all items and individual items by ID
-Implement POST routes to create new resources with proper validation
-Build PUT routes to update existing resources
-Add DELETE routes to remove resources
 Ensure all routes follow RESTful conventions and return appropriate HTTP status codes*/
 
 /*Add Basic Error Handling
@@ -45,24 +41,28 @@ app.get('/', (req, res) => {
         endpoints: {
             zoos: {
                 getZoos: 'GET /zoos',
+                getZooById: 'GET /zoos/:id',
                 createZoo: 'POST /zoos (with authentication)',
                 updateZoo: 'PUT /zoos/:id (with authentication)',
                 deleteZoo: 'DELETE /zoos/:id (with authentication)'
             },
             animals: {
                 getAnimals: 'GET /animals',
+                getAnimalById: 'GET /animals/:id',
                 createAnimal: 'POST /animals (with authentication)',
                 updateAnimal: 'PUT /animals/:id (with authentication)',
                 deleteAnimal: 'DELETE /animals/:id (with authentication)'
             },
             attractions: {
                 getAttractions: 'GET /attractions',
+                getAttractionById: 'GET /attractions/:id',
                 createAttraction: 'POST /attractions (with authentication)',
                 updateAttraction: 'PUT /attractions/:id (with authentication)',
                 deleteAttraction: 'DELETE /attractions/:id (with authentication)'
             },
             zookeepers: {
-                getZookeepers: 'GET /zookeepers',
+                getZookeepers: 'GET /zookeepers (with authentication)',
+                getZookeeperById: 'GET /zookeepers/:id (with authentication)',
                 createZookeeper: 'POST /zookeepers (with authentication)',
                 updateZookeeper: 'PUT /zookeepers/:id (with authentication)',
                 deleteZookeeper: 'DELETE /zookeepers/:id (with authentication)'
