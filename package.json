@@ -4,8 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "test": "jest --forceExit --detectOpenHandles --testTimeout=10000",
+    "test:watch": "jest --watch",
+    "start": "node routes/server.js",
     "setup": "node database/setup.js",
     "seed": "node database/seed.js"
   },
@@ -31,5 +32,14 @@
   "bugs": {
     "url": "https://github.com/Aefrly/Zoo-API/issues"
   },
-  "homepage": "https://github.com/Aefrly/Zoo-API#readme"
+  "homepage": "https://github.com/Aefrly/Zoo-API#readme",
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "testMatch": ["**/tests/**/*.test.js"],
+    "testTimeout": 10000,
+    "forceExit": true,
+    "detectOpenHandles": true,
+    "coveragePathIgnorePatterns": ["/node_modules/"]
+  }
 }
