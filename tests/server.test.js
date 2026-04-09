@@ -529,6 +529,46 @@ describe('User Endpoints', () => {
         expect(Array.isArray(res.body.data)).toBe(true);
     });
 
+    test('DELETE /users/:id - Delete a user', async () => {
+        // Create a user to delete
+        const createRes = await request(app)
+            .post('/users/register')
+            .send({
+                username: 'usertodelete',
+                email: 'delete@example.com',
+                password: 'password123',
+                firstName: 'Delete',
+                lastName: 'Me'
+            });
+        
+        const userIdToDelete = createRes.body.data.id;
+        
+        const deleteRes = await request(app)
+            .delete(`/users/${userIdToDelete}`)
+            .set('Authorization', `Bearer ${testToken}`);
+        
+        expect(deleteRes.status).toBe(200);
+        expect(deleteRes.body.success).toBe(true);
+        expect(deleteRes.body.message).toBe('User deleted successfully');
+    });
+
+    test('DELETE /users/:id - Return 404 for non-existent user', async () => {
+        const res = await request(app)
+            .delete('/users/99999')
+            .set('Authorization', `Bearer ${testToken}`);
+        
+        expect(res.status).toBe(404);
+        expect(res.body.success).toBe(false);
+        expect(res.body.error).toBe('User not found');
+    });
+
+    test('DELETE /users/:id - Require authentication', async () => {
+        const res = await request(app).delete('/users/1');
+        
+        expect(res.status).toBe(401);
+        expect(res.body.error).toBeDefined();
+    });
+
     test('GET /users - Require authentication', async () => {
         const res = await request(app).get('/users');
         
