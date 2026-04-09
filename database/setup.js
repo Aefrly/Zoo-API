@@ -148,6 +148,11 @@ const User = db.define('User', {
     lastName: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    role: {
+        type: DataTypes.ENUM('visitor', 'keeper', 'admin'),
+        allowNull: false,
+        defaultValue: 'visitor'
     }
 });
 

@@ -22,14 +22,24 @@ async function initializeDatabase() {
                     email: 'manager1@savannazoo.com',
                     password: hashedPassword,
                     firstName: 'John',
-                    lastName: 'Smith'
+                    lastName: 'Smith',
+                    role: 'admin'
                 },
                 {
                     username: 'zoomgr2',
                     email: 'manager2@wildlifezoo.com',
                     password: hashedPassword,
                     firstName: 'Emily',
-                    lastName: 'Johnson'
+                    lastName: 'Johnson',
+                    role: 'keeper'
+                },
+                {
+                    username: 'visitor1',
+                    email: 'visitor@example.com',
+                    password: hashedPassword,
+                    firstName: 'Tourist',
+                    lastName: 'Guest',
+                    role: 'visitor'
                 }
             ]);
 
