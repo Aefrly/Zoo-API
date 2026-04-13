@@ -7,7 +7,9 @@ function requireAuth(req, res, next) {
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ 
-            error: 'Access denied. No token provided.' 
+            success: false,
+            error: 'Unauthorized',
+            message: 'Access denied. No token provided.' 
         });
     }
     
@@ -20,15 +22,21 @@ function requireAuth(req, res, next) {
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ 
-                error: 'Token expired. Please log in again.' 
+                success: false,
+                error: 'TokenExpired',
+                message: 'Token expired. Please log in again.' 
             });
         } else if (error.name === 'JsonWebTokenError') {
             return res.status(401).json({ 
-                error: 'Invalid token. Please log in again.' 
+                success: false,
+                error: 'InvalidToken',
+                message: 'Invalid token. Please log in again.' 
             });
         } else {
             return res.status(401).json({ 
-                error: 'Token verification failed.' 
+                success: false,
+                error: 'TokenVerificationFailed',
+                message: 'Token verification failed.' 
             });
         }
     }
@@ -58,7 +66,8 @@ const loggingMiddleware = (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
     console.error('Unhandled error:', err);
     res.status(500).json({ 
-        error: 'Internal server error',
+        success: false,
+        error: 'InternalServerError',
         message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
     });
 };
@@ -66,7 +75,8 @@ const errorHandler = (err, req, res, next) => {
 // 404 handler
 const notFoundHandler = (req, res) => {
     res.status(404).json({ 
-        error: 'Endpoint not found',
+        success: false,
+        error: 'NotFound',
         message: `${req.method} ${req.path} is not a valid endpoint`
     });
 };

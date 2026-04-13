@@ -92,8 +92,8 @@ app.get('/zoos', async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve zoos',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve zoos'
         });
     }
 });
@@ -123,8 +123,8 @@ app.get('/zoos/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve zoo',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve zoo'
         });
     }
 });
@@ -138,7 +138,7 @@ app.post('/zoos', requireAuth, async (req, res) => {
         if (!zoo_name || !zoo_location || zoo_admission_price === undefined) {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'zoo_name, zoo_location, and zoo_admission_price are required'
             });
         }
@@ -160,14 +160,14 @@ app.post('/zoos', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Zoo name or location already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to create zoo',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to create zoo'
         });
     }
 });
@@ -180,7 +180,8 @@ app.put('/zoos/:id', requireAuth, async (req, res) => {
         if (!zoo) {
             return res.status(404).json({
                 success: false,
-                error: 'Zoo not found'
+                error: 'NotFound',
+                message: 'Zoo not found'
             });
         }
         
@@ -202,14 +203,14 @@ app.put('/zoos/:id', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Zoo name or location already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to update zoo',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to update zoo'
         });
     }
 });
@@ -222,7 +223,8 @@ app.delete('/zoos/:id', requireAuth, async (req, res) => {
         if (!zoo) {
             return res.status(404).json({
                 success: false,
-                error: 'Zoo not found'
+                error: 'NotFound',
+                message: 'Zoo not found'
             });
         }
         
@@ -236,8 +238,8 @@ app.delete('/zoos/:id', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to delete zoo',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to delete zoo'
         });
     }
 });
@@ -255,8 +257,8 @@ app.get('/animals', async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve animals',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve animals'
         });
     }
 });
@@ -271,7 +273,8 @@ app.get('/animals/:id', async (req, res) => {
         if (!animal) {
             return res.status(404).json({
                 success: false,
-                error: 'Animal not found'
+                error: 'NotFound',
+                message: 'Animal not found'
             });
         }
         
@@ -282,8 +285,8 @@ app.get('/animals/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve animal',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve animal'
         });
     }
 });
@@ -297,7 +300,7 @@ app.post('/animals', requireAuth, async (req, res) => {
         if (!region_name || !animal_name || !animal_species) {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'region_name, animal_name, and animal_species are required'
             });
         }
@@ -319,14 +322,14 @@ app.post('/animals', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Animal name already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to create animal',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to create animal'
         });
     }
 });
@@ -339,7 +342,8 @@ app.put('/animals/:id', requireAuth, async (req, res) => {
         if (!animal) {
             return res.status(404).json({
                 success: false,
-                error: 'Animal not found'
+                error: 'NotFound',
+                message: 'Animal not found'
             });
         }
         
@@ -361,14 +365,14 @@ app.put('/animals/:id', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Animal name already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to update animal',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to update animal'
         });
     }
 });
@@ -381,7 +385,8 @@ app.delete('/animals/:id', requireAuth, async (req, res) => {
         if (!animal) {
             return res.status(404).json({
                 success: false,
-                error: 'Animal not found'
+                error: 'NotFound',
+                message: 'Animal not found'
             });
         }
         
@@ -395,8 +400,8 @@ app.delete('/animals/:id', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to delete animal',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to delete animal'
         });
     }
 });
@@ -414,8 +419,8 @@ app.get('/attractions', async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve attractions',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve attractions'
         });
     }
 });
@@ -430,7 +435,8 @@ app.get('/attractions/:id', async (req, res) => {
         if (!attraction) {
             return res.status(404).json({
                 success: false,
-                error: 'Attraction not found'
+                error: 'NotFound',
+                message: 'Attraction not found'
             });
         }
         
@@ -441,8 +447,8 @@ app.get('/attractions/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve attraction',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve attraction'
         });
     }
 });
@@ -456,7 +462,7 @@ app.post('/attractions', requireAuth, async (req, res) => {
         if (!attraction_name || !attraction_type || attraction_price === undefined) {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'attraction_name, attraction_type, and attraction_price are required'
             });
         }
@@ -477,14 +483,14 @@ app.post('/attractions', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Attraction name already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to create attraction',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to create attraction'
         });
     }
 });
@@ -497,7 +503,8 @@ app.put('/attractions/:id', requireAuth, async (req, res) => {
         if (!attraction) {
             return res.status(404).json({
                 success: false,
-                error: 'Attraction not found'
+                error: 'NotFound',
+                message: 'Attraction not found'
             });
         }
         
@@ -518,14 +525,14 @@ app.put('/attractions/:id', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Attraction name already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to update attraction',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to update attraction'
         });
     }
 });
@@ -538,7 +545,8 @@ app.delete('/attractions/:id', requireAuth, async (req, res) => {
         if (!attraction) {
             return res.status(404).json({
                 success: false,
-                error: 'Attraction not found'
+                error: 'NotFound',
+                message: 'Attraction not found'
             });
         }
         
@@ -552,8 +560,8 @@ app.delete('/attractions/:id', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to delete attraction',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to delete attraction'
         });
     }
 });
@@ -571,8 +579,8 @@ app.get('/zookeepers', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve zookeepers',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve zookeepers'
         });
     }
 });
@@ -587,7 +595,8 @@ app.get('/zookeepers/:id', requireAuth, async (req, res) => {
         if (!zookeeper) {
             return res.status(404).json({
                 success: false,
-                error: 'Zookeeper not found'
+                error: 'NotFound',
+                message: 'Zookeeper not found'
             });
         }
         
@@ -598,8 +607,8 @@ app.get('/zookeepers/:id', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve zookeeper',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve zookeeper'
         });
     }
 });
@@ -613,7 +622,7 @@ app.post('/zookeepers', requireAuth, async (req, res) => {
         if (!zookeeper_name || !zookeeper_attraction || !zookeeper_animals) {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'zookeeper_name, zookeeper_attraction, and zookeeper_animals are required'
             });
         }
@@ -637,14 +646,14 @@ app.post('/zookeepers', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Zookeeper name already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to create zookeeper',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to create zookeeper'
         });
     }
 });
@@ -657,7 +666,8 @@ app.put('/zookeepers/:id', requireAuth, async (req, res) => {
         if (!zookeeper) {
             return res.status(404).json({
                 success: false,
-                error: 'Zookeeper not found'
+                error: 'NotFound',
+                message: 'Zookeeper not found'
             });
         }
         
@@ -681,14 +691,14 @@ app.put('/zookeepers/:id', requireAuth, async (req, res) => {
         if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Zookeeper name already exists'
             });
         }
         res.status(500).json({
             success: false,
-            error: 'Failed to update zookeeper',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to update zookeeper'
         });
     }
 });
@@ -701,7 +711,8 @@ app.delete('/zookeepers/:id', requireAuth, async (req, res) => {
         if (!zookeeper) {
             return res.status(404).json({
                 success: false,
-                error: 'Zookeeper not found'
+                error: 'NotFound',
+                message: 'Zookeeper not found'
             });
         }
         
@@ -715,8 +726,8 @@ app.delete('/zookeepers/:id', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to delete zookeeper',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to delete zookeeper'
         });
     }
 });
@@ -731,7 +742,7 @@ app.post('/users/register', async (req, res) => {
         if (!username || !email || !password || !firstName || !lastName) {
             return res.status(400).json({ 
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'All fields are required: username, email, password, firstName, lastName' 
             });
         }
@@ -749,7 +760,7 @@ app.post('/users/register', async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ 
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'User with this email or username already exists' 
             });
         }
@@ -782,8 +793,8 @@ app.post('/users/register', async (req, res) => {
         console.error('Error registering user:', error);
         res.status(500).json({ 
             success: false,
-            error: 'Failed to register user',
-            message: error.message
+            error: 'ServerError',
+            message: 'Failed to register user'
         });
     }
 });
@@ -797,7 +808,7 @@ app.post('/users/login', async (req, res) => {
         if (!username || !password) {
             return res.status(400).json({ 
                 success: false,
-                error: 'Validation failed',
+                error: 'ValidationError',
                 message: 'Username and password are required' 
             });
         }
@@ -807,7 +818,7 @@ app.post('/users/login', async (req, res) => {
         if (!user) {
             return res.status(401).json({ 
                 success: false,
-                error: 'Authentication failed',
+                error: 'AuthenticationError',
                 message: 'Invalid username or password' 
             });
         }
@@ -817,7 +828,7 @@ app.post('/users/login', async (req, res) => {
         if (!isValidPassword) {
             return res.status(401).json({ 
                 success: false,
-                error: 'Authentication failed',
+                error: 'AuthenticationError',
                 message: 'Invalid username or password' 
             });
         }
@@ -849,8 +860,8 @@ app.post('/users/login', async (req, res) => {
         console.error('Error logging in user:', error);
         res.status(500).json({ 
             success: false,
-            error: 'Failed to login',
-            message: error.message
+            error: 'ServerError',
+            message: 'Failed to login'
         });
     }
 });
@@ -879,8 +890,8 @@ app.get('/users', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to retrieve users',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to retrieve users'
         });
     }
 });
@@ -905,8 +916,8 @@ app.delete('/users/:id', requireAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            error: 'Failed to delete user',
-            message: error.message
+            error: 'DatabaseError',
+            message: 'Failed to delete user'
         });
     }
 });
