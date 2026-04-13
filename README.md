@@ -308,5 +308,6 @@ Common status codes:
 - **Environment Variables**: dotenv
 
 ### RECENT DEVELOPMENTS 
-- **Middleware**: fixed error responses by including "error" and "message" fields, the error types now use descriptive names for more details
-- **Routes**: specifically included errors like 404, 400, 401, and 500, these errors are using the descriptive messages that were added into my middleware file
+- **Middleware**: fixed error responses by including "error" and "message" fields, the error types now use descriptive names for more details, added role-based middleware and exported it for use
+- **Routes**: specifically included errors like 404, 400, 401, and 500, these errors are using the descriptive messages that were added into my middleware file, added role-based authorization to my routes 
+- **Tests**: added tests for my role-based middleware
