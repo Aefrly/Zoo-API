@@ -24,7 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Import Middleware
-const { requireAuth, testConnection, loggingMiddleware, errorHandler, notFoundHandler } = require('../middleware/middleware.js');
+const { requireAuth, requireRole, testConnection, loggingMiddleware, errorHandler, notFoundHandler } = require('../middleware/middleware.js');
 
 //Apply Middleware
 app.use(express.json());
@@ -39,41 +39,46 @@ app.get('/', (req, res) => {
     res.json({ 
         message: 'Welcome to the Zoo API!',
         version: '1.0.0',
+        roles: {
+            visitor: 'Can view zoos, animals, and attractions',
+            keeper: 'Can view and manage animals, attractions; can view zookeepers',
+            admin: 'Full access to all endpoints'
+        },
         endpoints: {
             zoos: {
-                getZoos: 'GET /zoos',
-                getZooById: 'GET /zoos/:id',
-                createZoo: 'POST /zoos (with authentication)',
-                updateZoo: 'PUT /zoos/:id (with authentication)',
-                deleteZoo: 'DELETE /zoos/:id (with authentication)'
+                getZoos: 'GET /zoos (all roles)',
+                getZooById: 'GET /zoos/:id (all roles)',
+                createZoo: 'POST /zoos (admin only)',
+                updateZoo: 'PUT /zoos/:id (admin only)',
+                deleteZoo: 'DELETE /zoos/:id (admin only)'
             },
             animals: {
-                getAnimals: 'GET /animals',
-                getAnimalById: 'GET /animals/:id',
-                createAnimal: 'POST /animals (with authentication)',
-                updateAnimal: 'PUT /animals/:id (with authentication)',
-                deleteAnimal: 'DELETE /animals/:id (with authentication)'
+                getAnimals: 'GET /animals (all roles)',
+                getAnimalById: 'GET /animals/:id (all roles)',
+                createAnimal: 'POST /animals (keeper, admin)',
+                updateAnimal: 'PUT /animals/:id (keeper, admin)',
+                deleteAnimal: 'DELETE /animals/:id (admin only)'
             },
             attractions: {
-                getAttractions: 'GET /attractions',
-                getAttractionById: 'GET /attractions/:id',
-                createAttraction: 'POST /attractions (with authentication)',
-                updateAttraction: 'PUT /attractions/:id (with authentication)',
-                deleteAttraction: 'DELETE /attractions/:id (with authentication)'
+                getAttractions: 'GET /attractions (all roles)',
+                getAttractionById: 'GET /attractions/:id (all roles)',
+                createAttraction: 'POST /attractions (keeper, admin)',
+                updateAttraction: 'PUT /attractions/:id (keeper, admin)',
+                deleteAttraction: 'DELETE /attractions/:id (admin only)'
             },
             zookeepers: {
-                getZookeepers: 'GET /zookeepers (with authentication)',
-                getZookeeperById: 'GET /zookeepers/:id (with authentication)',
-                createZookeeper: 'POST /zookeepers (with authentication)',
-                updateZookeeper: 'PUT /zookeepers/:id (with authentication)',
-                deleteZookeeper: 'DELETE /zookeepers/:id (with authentication)'
+                getZookeepers: 'GET /zookeepers (keeper, admin)',
+                getZookeeperById: 'GET /zookeepers/:id (keeper, admin)',
+                createZookeeper: 'POST /zookeepers (admin only)',
+                updateZookeeper: 'PUT /zookeepers/:id (admin only)',
+                deleteZookeeper: 'DELETE /zookeepers/:id (admin only)'
             },
             users: {
-                register: 'POST /users/register',
-                login: 'POST /users/login',
-                logout: 'POST /users/logout (with authentication)',
-                getUsers: 'GET /users (with authentication)',
-                deleteUser: 'DELETE /users/:id (with authentication)'
+                register: 'POST /users/register (all)',
+                login: 'POST /users/login (all)',
+                logout: 'POST /users/logout (authenticated users)',
+                getUsers: 'GET /users (admin only)',
+                deleteUser: 'DELETE /users/:id (admin only)'
             }
         }
     });
@@ -129,8 +134,8 @@ app.get('/zoos/:id', async (req, res) => {
     }
 });
 
-// POST /zoos - Create a new zoo (requires authentication)
-app.post('/zoos', requireAuth, async (req, res) => {
+// POST /zoos - Create a new zoo (admin only)
+app.post('/zoos', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const { zoo_name, zoo_location, zoo_admission_price, zoo_parking_available } = req.body;
         
@@ -172,8 +177,8 @@ app.post('/zoos', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /zoos/:id - Update a zoo (requires authentication)
-app.put('/zoos/:id', requireAuth, async (req, res) => {
+// PUT /zoos/:id - Update a zoo (admin only)
+app.put('/zoos/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const zoo = await Zoo.findByPk(req.params.id);
         
@@ -215,8 +220,8 @@ app.put('/zoos/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /zoos/:id - Delete a zoo (requires authentication)
-app.delete('/zoos/:id', requireAuth, async (req, res) => {
+// DELETE /zoos/:id - Delete a zoo (admin only)
+app.delete('/zoos/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const zoo = await Zoo.findByPk(req.params.id);
         
@@ -291,8 +296,8 @@ app.get('/animals/:id', async (req, res) => {
     }
 });
 
-// POST /animals - Create a new animal (requires authentication)
-app.post('/animals', requireAuth, async (req, res) => {
+// POST /animals - Create a new animal (keeper or admin)
+app.post('/animals', requireAuth, requireRole('keeper', 'admin'), async (req, res) => {
     try {
         const { region_name, animal_name, animal_species, animal_quantity, zooId } = req.body;
         
@@ -334,8 +339,8 @@ app.post('/animals', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /animals/:id - Update an animal (requires authentication)
-app.put('/animals/:id', requireAuth, async (req, res) => {
+// PUT /animals/:id - Update an animal (keeper or admin)
+app.put('/animals/:id', requireAuth, requireRole('keeper', 'admin'), async (req, res) => {
     try {
         const animal = await Animal.findByPk(req.params.id);
         
@@ -377,8 +382,8 @@ app.put('/animals/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /animals/:id - Delete an animal (requires authentication)
-app.delete('/animals/:id', requireAuth, async (req, res) => {
+// DELETE /animals/:id - Delete an animal (admin only)
+app.delete('/animals/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const animal = await Animal.findByPk(req.params.id);
         
@@ -453,8 +458,8 @@ app.get('/attractions/:id', async (req, res) => {
     }
 });
 
-// POST /attractions - Create a new attraction (requires authentication)
-app.post('/attractions', requireAuth, async (req, res) => {
+// POST /attractions - Create a new attraction (keeper or admin)
+app.post('/attractions', requireAuth, requireRole('keeper', 'admin'), async (req, res) => {
     try {
         const { attraction_name, attraction_type, attraction_price, zooId } = req.body;
         
@@ -495,8 +500,8 @@ app.post('/attractions', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /attractions/:id - Update an attraction (requires authentication)
-app.put('/attractions/:id', requireAuth, async (req, res) => {
+// PUT /attractions/:id - Update an attraction (keeper or admin)
+app.put('/attractions/:id', requireAuth, requireRole('keeper', 'admin'), async (req, res) => {
     try {
         const attraction = await Attraction.findByPk(req.params.id);
         
@@ -537,8 +542,8 @@ app.put('/attractions/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /attractions/:id - Delete an attraction (requires authentication)
-app.delete('/attractions/:id', requireAuth, async (req, res) => {
+// DELETE /attractions/:id - Delete an attraction (admin only)
+app.delete('/attractions/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const attraction = await Attraction.findByPk(req.params.id);
         
@@ -567,8 +572,8 @@ app.delete('/attractions/:id', requireAuth, async (req, res) => {
 });
 
 //ZOOKEEPER ENDPOINTS
-// GET /zookeepers - Get all zookeepers (requires authentication)
-app.get('/zookeepers', requireAuth, async (req, res) => {
+// GET /zookeepers - Get all zookeepers (keeper or admin)
+app.get('/zookeepers', requireAuth, requireRole('keeper', 'admin'), async (req, res) => {
     try {
         const zookeepers = await Zookeeper.findAll();
         res.status(200).json({
@@ -585,8 +590,8 @@ app.get('/zookeepers', requireAuth, async (req, res) => {
     }
 });
 
-// GET /zookeepers/:id - Get zookeeper by ID (requires authentication)
-app.get('/zookeepers/:id', requireAuth, async (req, res) => {
+// GET /zookeepers/:id - Get zookeeper by ID (keeper or admin)
+app.get('/zookeepers/:id', requireAuth, requireRole('keeper', 'admin'), async (req, res) => {
     try {
         const zookeeper = await Zookeeper.findByPk(req.params.id, {
             include: [{ association: 'zoo' }]
@@ -613,8 +618,8 @@ app.get('/zookeepers/:id', requireAuth, async (req, res) => {
     }
 });
 
-// POST /zookeepers - Create a new zookeeper (requires authentication)
-app.post('/zookeepers', requireAuth, async (req, res) => {
+// POST /zookeepers - Create a new zookeeper (admin only)
+app.post('/zookeepers', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const { zookeeper_name, zookeeper_attraction, zookeeper_animals, animal_health_status, animal_food_status, animal_enclosure_status, zooId } = req.body;
         
@@ -658,8 +663,8 @@ app.post('/zookeepers', requireAuth, async (req, res) => {
     }
 });
 
-// PUT /zookeepers/:id - Update a zookeeper (requires authentication)
-app.put('/zookeepers/:id', requireAuth, async (req, res) => {
+// PUT /zookeepers/:id - Update a zookeeper (admin only)
+app.put('/zookeepers/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const zookeeper = await Zookeeper.findByPk(req.params.id);
         
@@ -703,8 +708,8 @@ app.put('/zookeepers/:id', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /zookeepers/:id - Delete a zookeeper (requires authentication)
-app.delete('/zookeepers/:id', requireAuth, async (req, res) => {
+// DELETE /zookeepers/:id - Delete a zookeeper (admin only)
+app.delete('/zookeepers/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const zookeeper = await Zookeeper.findByPk(req.params.id);
         
@@ -837,7 +842,8 @@ app.post('/users/login', async (req, res) => {
         const token = jwt.sign(
             { 
                 id: user.id, 
-                username: user.username
+                username: user.username,
+                role: user.role
             },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
@@ -852,7 +858,8 @@ app.post('/users/login', async (req, res) => {
                 username: user.username,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName
+                lastName: user.lastName,
+                role: user.role
             }
         });
         
@@ -875,8 +882,8 @@ app.post('/users/logout', requireAuth, (req, res) => {
     });
 });
 
-// GET /users - Get all users (requires authentication)
-app.get('/users', requireAuth, async (req, res) => {
+// GET /users - Get all users (admin only)
+app.get('/users', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const users = await User.findAll({
             attributes: { exclude: ['password'] }
@@ -896,8 +903,8 @@ app.get('/users', requireAuth, async (req, res) => {
     }
 });
 
-// DELETE /users/:id - Delete a user (requires authentication)
-app.delete('/users/:id', requireAuth, async (req, res) => {
+// DELETE /users/:id - Delete a user (admin only)
+app.delete('/users/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const user = await User.findByPk(req.params.id);
         if (!user) {

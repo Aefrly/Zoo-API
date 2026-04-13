@@ -25,12 +25,13 @@ beforeAll(async () => {
             email: 'test@example.com',
             password: hashedPassword,
             firstName: 'Test',
-            lastName: 'User'
+            lastName: 'User',
+            role: 'admin'
         });
         
         testUserId = testUser.id;
         testToken = jwt.sign(
-            { id: testUser.id, username: testUser.username },
+            { id: testUser.id, username: testUser.username, role: testUser.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );

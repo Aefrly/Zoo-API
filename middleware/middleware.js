@@ -42,6 +42,30 @@ function requireAuth(req, res, next) {
     }
 }
 
+// Role-based authorization middleware
+function requireRole(...allowedRoles) {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                error: 'Unauthorized',
+                message: 'Authentication required'
+            });
+        }
+
+        const userRole = req.user.role;
+        if (!allowedRoles.includes(userRole)) {
+            return res.status(403).json({
+                success: false,
+                error: 'Forbidden',
+                message: `Access denied. Required role(s): ${allowedRoles.join(', ')}`
+            });
+        }
+
+        next();
+    };
+}
+
 // Test database connection
 async function testConnection() {
     try {
@@ -83,6 +107,7 @@ const notFoundHandler = (req, res) => {
 
 module.exports = {
     requireAuth,
+    requireRole,
     testConnection,
     loggingMiddleware,
     errorHandler,
