@@ -306,3 +306,7 @@ Common status codes:
 - **Password Hashing**: bcryptjs
 - **Testing**: Jest and Supertest
 - **Environment Variables**: dotenv
+
+### RECENT DEVELOPMENTS 
+- **Middleware**: fixed error responses by including "error" and "message" fields, the error types now use descriptive names for more details
+- **Routes**: specifically included errors like 404, 400, 401, and 500, these errors are using the descriptive messages that were added into my middleware file
